@@ -4,23 +4,18 @@ language: python
 python:
   - "3.6.4"
 # # command to run tests
-# install:
-#   - pip install -r requirements.txt
+install:
+  - pip install -r requirements.txt
 # script: nosetests -v
-
-services: 
-    - docker
-before_install: 
-    - docker build -t dex/crm-app -f Dockerfile .
-script:     
-    - docker run -e CI=true dex/crm-app
-
+script:
+  - python manage.py create_db
+  - python run.py
 
 deploy:
   provider: elasticbeanstalk
   region: "us-east-1" ### AWS region of your choice
-  app: "crm-app" ### Your EB App name
-  env: "Crmapp-env" ### Your EB App environment name
+  app: "test" ### Your EB App name
+  env: "Test-env" ### Your EB App environment name
   bucket_name: "elasticbeanstalk-us-east-1-516627408046" ### S3 bucket name
   bucket_path: "EBApptest" ### S3 folder name under S3 bucket above
   on:
