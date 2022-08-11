@@ -3,22 +3,24 @@ sudo: required
 language: python
 python:
   - "3.6.4"
-# command to run tests
-install:
-  - pip install -r requirements.txt
-script: nosetests -v
+# # command to run tests
+# install:
+#   - pip install -r requirements.txt
+# script: nosetests -v
 
 services: 
     - docker
 before_install: 
     - docker build -t dex/crm-app -f Dockerfile.dev .
+script:     
+    - docker run -e CI=true dex/crm-app
 
 
 deploy:
   provider: elasticbeanstalk
   region: "us-east-1" ### AWS region of your choice
-  app: "sample-docker-react" ### Your EB App name
-  env: "Sampledockerreact-env" ### Your EB App environment name
+  app: "crm-app" ### Your EB App name
+  env: "Crmapp-env" ### Your EB App environment name
   bucket_name: "elasticbeanstalk-us-east-1-516627408046" ### S3 bucket name
   bucket_path: "EBApptest" ### S3 folder name under S3 bucket above
   on:
